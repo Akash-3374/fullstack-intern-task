@@ -6,36 +6,37 @@ mongoose.connect(process.env.MONGO_URI);
 
 const templates = [
   {
-    name: "Startup Landing Page",
-    description: "Clean landing page for startups",
-    thumbnail_url: "https://via.placeholder.com/300",
-    category: "Landing",
+    name: "Clean Code",
+    description: "A handbook of agile software craftsmanship focusing on writing readable and maintainable code.",
+    thumbnail_url: "https://images.unsplash.com/photo-1512820790803-83ca734da794",
+    category: "Programming",
   },
   {
-    name: "Portfolio Website",
-    description: "Personal portfolio template",
-    thumbnail_url: "https://via.placeholder.com/300",
-    category: "Portfolio",
+    name: "Design Patterns",
+    description: "Classic book explaining reusable object-oriented software design patterns.",
+    thumbnail_url: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f",
+    category: "Software Engineering",
   },
   {
-    name: "E-commerce UI",
-    description: "Modern shop UI template",
-    thumbnail_url: "https://via.placeholder.com/300",
-    category: "Ecommerce",
+    name: "Atomic Habits",
+    description: "A practical guide to building good habits and breaking bad ones.",
+    thumbnail_url: "https://images.unsplash.com/photo-1516979187457-637abb4f9353",
+    category: "Self Improvement",
   },
   {
-    name: "SaaS Dashboard",
-    description: "Dashboard layout for SaaS apps",
-    thumbnail_url: "https://via.placeholder.com/300",
-    category: "Dashboard",
+    name: "Deep Work",
+    description: "Rules for focused success in a distracted world.",
+    thumbnail_url: "https://images.unsplash.com/photo-1507842217343-583bb7270b66",
+    category: "Productivity",
   },
   {
-    name: "Blog Template",
-    description: "Minimal blog layout",
-    thumbnail_url: "https://via.placeholder.com/300",
-    category: "Blog",
-  },
-];
+    name: "The Lean Startup",
+    description: "How today’s entrepreneurs use continuous innovation to create successful businesses.",
+    thumbnail_url: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d",
+    category: "Business",
+  }
+]
+
 
 async function seed() {
   await Template.deleteMany();

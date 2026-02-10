@@ -1,40 +1,29 @@
 const express = require("express");
-const Favorite = require("../models/Favorite");
 const auth = require("../middleware/auth");
+const User = require("../models/user");
 
 const router = express.Router();
 
-// Add to favorites
 router.post("/:templateId", auth, async (req, res) => {
   try {
-    const exists = await Favorite.findOne({
-      user: req.userId,
-      template: req.params.templateId,
-    });
+    const user = await User.findById(req.userId);
 
-    if (exists) {
-      return res.status(400).json({ message: "Already favorited" });
+    if (!user.favorites.includes(req.params.templateId)) {
+      user.favorites.push(req.params.templateId);
+      await user.save();
     }
 
-    await Favorite.create({
-  user: req.userId,
-  template: req.params.templateId,
-});
-
-
-    res.json({ message: "Added to favorites" });
+    res.json({ message: "Favorite added" });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// Get my favorites
 router.get("/", auth, async (req, res) => {
   try {
-    const favorites = await Favorite.find({ user: req.userId }).populate(
-      "template"
-    );
-    res.json(favorites);
+    const user = await User.findById(req.userId).populate("favorites");
+    res.json(user.favorites);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }

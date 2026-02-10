@@ -1,44 +1,32 @@
 import { useEffect, useState } from "react";
-import API from "../services/api";
 
 export default function Favorites() {
   const [favorites, setFavorites] = useState([]);
-
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const res = await API.get("/favorites", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setFavorites(res.data);
-      } catch (err) {
-        alert("Failed to load favorites");
-      }
-    };
-
-    fetchFavorites();
+    fetch("http://localhost:3000/api/favorites", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setFavorites(data))
+      .catch(() => console.log("Error loading favorites"));
   }, []);
 
   return (
     <div style={{ padding: 40 }}>
       <h2>My Favorites</h2>
 
-      {favorites.map((f) => (
-        <div
-          key={f._id}
-          style={{
-            border: "1px solid #ccc",
-            padding: 20,
-            marginBottom: 10,
-          }}
-        >
-          <h3>{f.template.name}</h3>
-          <p>{f.template.description}</p>
-          <p><b>Category:</b> {f.template.category}</p>
+      {favorites.length === 0 && (
+        <p>No favorites added yet</p>
+      )}
+
+      {favorites.map((t) => (
+        <div key={t._id} style={{ border: "1px solid #ccc", marginBottom: 10, padding: 10 }}>
+          <h3>{t.name}</h3>
+          <p>{t.description}</p>
         </div>
       ))}
     </div>

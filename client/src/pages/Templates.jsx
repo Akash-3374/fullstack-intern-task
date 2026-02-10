@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import API from "../services/api";
 
 export default function Templates() {
   const [templates, setTemplates] = useState([]);
@@ -7,32 +6,30 @@ export default function Templates() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchTemplates = async () => {
-      try {
-        const res = await API.get("/templates");
-        setTemplates(res.data);
-      } catch (err) {
-        alert("Failed to load templates");
-      }
-    };
-
-    fetchTemplates();
+    fetch("http://localhost:3000/api/templates")
+      .then((res) => res.json())
+      .then((data) => setTemplates(data))
+      .catch(() => alert("Failed to load templates"));
   }, []);
 
   const addFavorite = async (id) => {
     try {
-      await API.post(
-        `/favorites/${id}`,
-        {},
+      const res = await fetch(
+        `http://localhost:3000/api/favorites/${id}`,
         {
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
-      alert("Added to favorites");
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      alert("Favorite added");
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to add favorite");
+      alert(err.message || "Failed to add favorite");
     }
   };
 
@@ -51,7 +48,9 @@ export default function Templates() {
         >
           <h3>{t.name}</h3>
           <p>{t.description}</p>
-          <p><b>Category:</b> {t.category}</p>
+          <p>
+            <b>Category:</b> {t.category}
+          </p>
 
           <button onClick={() => addFavorite(t._id)}>
             Favorite
